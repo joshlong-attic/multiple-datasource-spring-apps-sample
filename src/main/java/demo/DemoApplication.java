@@ -45,7 +45,8 @@ public class DemoApplication {
 
 		/**
 			* Comment out the `@Component` annotation and it'll instead configure the `DataSource` for you
-			* based on Spring Boot-style configuration properties.
+			* based on Spring Boot-style configuration properties. Make sure to re-instate the MySQL dependency in `pom.xml` and
+			* that you have the appropriate DDL in your local database.
 			*/
 		@Component
 		public static class MyConfiguration implements JpaRegistrationConfigurer {
@@ -80,14 +81,11 @@ public class DemoApplication {
 				private final JpaTransactionManager jtaTxManager;
 				private final Runnable runnable;
 				private final String label;
-				private final TransactionTemplate transactionTemplate;
 
 				LoggingRunner(String label, DataSourceRegistration dsr, DataSource ds,
 																		JdbcTemplate jt, EntityManagerFactory emf, JpaTransactionManager jtaTxManager,
-																		TransactionTemplate tt,
 																		Runnable runnable) {
 						this.dsr = dsr;
-						this.transactionTemplate = tt;
 						this.ds = ds;
 						this.label = label;
 						this.jt = jt;
@@ -120,7 +118,7 @@ public class DemoApplication {
 			@Crm JpaTransactionManager crmTxManager,
 			@Crm TransactionTemplate transactionTemplate,
 			OrderRepository or) {
-				return new LoggingRunner("crm", crmDSR, crmDS, crmJT, crmEMF, crmTxManager, transactionTemplate, () -> {
+				return new LoggingRunner("crm", crmDSR, crmDS, crmJT, crmEMF, crmTxManager, () -> {
 
 						transactionTemplate
 							.execute((TransactionCallback<Object>) transactionStatus ->
@@ -145,7 +143,7 @@ public class DemoApplication {
 			@Blog TransactionTemplate transactionTemplate,
 			PostRepository pr) {
 
-				return new LoggingRunner("blog", blogDSR, blogDS, blogJT, blogEMF, blogTxManager, transactionTemplate, () -> {
+				return new LoggingRunner("blog", blogDSR, blogDS, blogJT, blogEMF, blogTxManager, () -> {
 
 						transactionTemplate
 							.execute((TransactionCallback<Object>) transactionStatus ->
