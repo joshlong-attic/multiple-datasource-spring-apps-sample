@@ -147,7 +147,7 @@ public class DemoApplication {
 
 						transactionTemplate
 							.execute((TransactionCallback<Object>) transactionStatus ->
-								pr.saveAll(Arrays.asList(new Post(null, "A New Hope"), new Post(null, "You Won't Beleive This Listacle Gone Wild"))));
+								pr.saveAll(Arrays.asList(new Post(null, "A New Hope"), new Post(null, "You Won't Believe This Listacle Gone Wild"))));
 
 						blogEMF
 							.createEntityManager()
